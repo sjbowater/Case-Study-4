@@ -83,11 +83,11 @@ m = zeros(1000, 1);
 theta = 0;
 for i = 1:1000
     if f>i
-        theta = y1/(f-z1);
+        theta = y1 / (f-i);
     else 
-        theta = -(y1+abs(y_out))/z2;
+        theta = -(y1 + abs(y_out)) / i;
     end
-    [y2, ~] = simRayProp(M, y1, theta);
+    [y2, ~] = simRayProp(M2, y1, theta);
     m(i) = y2 / y1;
 end
 
@@ -98,7 +98,7 @@ fplot(@(x) (1 - x./f).^(-1), [1, 1000])
 hold off;
 legend("Approximated", "Theoretical", "location", "best");
 xlabel("z_1 (mm)");
-ylabel("m");    
+ylabel("magnification");    
 title("z_1 vs magnification");
 
 %% functions
