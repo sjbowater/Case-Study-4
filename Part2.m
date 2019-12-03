@@ -6,23 +6,12 @@ close all;
 f = 100;  % f  = 100 mm.
 z1 = 250; % z1 = 250 mm.
 
-M = generate_ray_transfer_matrix(z1, f);
+[M, M1, Mf, M2] = ray_transfer_matrix(z1, f);
 y1=1;
 z2=z1 / ( (z1 / f) - 1)
 [y_out theta_out] = simRayProp(M, y1, 0)
 z2=abs(z1 / ( (z1 / f) - 1));
 % [y_out theta_out] = simRayProp(M, y1, 0)
-
-   M1 = [1 z1;
-          0 1;
-         ];
-    
-    Mf = [  1   0;
-           -1/f 1;
-         ];
-    M2 = [ 1 abs(z1 / ( (z1 / f) - 1));
-           0                      1;
-         ];
 % theta1=theta(y1,z1);
 
 % f = 100; % f is 100 mm.
@@ -110,20 +99,4 @@ xlabel("z_1 (mm)");
 ylabel("magnification");    
 title("z_1 vs magnification");
 
-%% functions
-function M = generate_ray_transfer_matrix(z1, f)
-    M1 = [1 z1;
-          0 1;
-         ];
-    
-    Mf = [  1   0;
-           -1/f 1;
-         ];
-     
-    % Z2 = Z1 / ( (Z1 / f) - 1)
-    M2 = [ 1 (z1 / ( (z1 / f) - 1))
-           0                      1
-         ];
-       
-    M = M2 * Mf * M1;
-end
+
