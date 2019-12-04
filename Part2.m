@@ -4,12 +4,12 @@ close all;
 %% Part 2.1
 
 f = 100;  % f  = 100 mm.
-z1 = 250; % z1 = 250 mm.
+z1 = 45; % z1 = 250 mm.
 
 [M, M1, Mf, M2] = ray_transfer_matrix(z1, f);
 y1=1;
 z2=z1 / ( (z1 / f) - 1)
-[y_out theta_out] = simRayProp(M, y1, 0)
+[y_out theta_out] = simRayProp(M, y1, 0);
 z2=abs(z1 / ( (z1 / f) - 1));
 % [y_out theta_out] = simRayProp(M, y1, 0)
 % theta1=theta(y1,z1);
@@ -27,7 +27,7 @@ axis([-z1-100 z2+100 -abs(y_out)-1 y1+1]);
 hold on;
 
 [y_out2, theta_out2] = simRayProp(M2, y1, 0);
-if f>z1
+if f > z1
     [y_out1, theta_out1] = simRayProp(M2, y1, y1/z2);
     [y_out3, theta_out3] = simRayProp(M1, y1, y1/(f-z1));
     line([-f, 0],[0, y_out3]);
