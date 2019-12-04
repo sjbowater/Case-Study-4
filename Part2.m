@@ -4,13 +4,13 @@ close all;
 %% Part 2.1
 
 f = 100;  % f  = 100 mm.
-z1 = 250; % z1 = 250 mm.
+z1 = 45; % z1 = 250 mm.
 
 M = generate_ray_transfer_matrix(z1, f);
 y1=1;
 z2=z1 / ( (z1 / f) - 1)
-[y_out theta_out] = simRayProp(M, y1, 0)
-z2=abs(z1 / ( (z1 / f) - 1));
+[y_out, theta_out] = simRayProp(M, y1, 0);
+
 % [y_out theta_out] = simRayProp(M, y1, 0)
 
    M1 = [1 z1;
@@ -38,6 +38,7 @@ axis([-z1-100 z2+100 -abs(y_out)-1 y1+1]);
 hold on;
 
 [y_out2, theta_out2] = simRayProp(M2, y1, 0);
+    
 if f>z1
     [y_out1, theta_out1] = simRayProp(M2, y1, y1/z2);
     [y_out3, theta_out3] = simRayProp(M1, y1, y1/(f-z1));
@@ -49,22 +50,22 @@ end
 
 % The points on the graph
 scatter(-z1,y1);
-scatter(z2, -abs(y_out));
+scatter(z2, y_out);
 scatter(-f,0);
 scatter(f,0);
 
 line([-300,300],[0,0]); %horizontal line at zero
 line([-z1,0],[y1,y_out1]); %ray through middle of lense
-line([0,z2],[y_out1,-abs(y_out)]);
+line([0,z2],[y_out1,y_out]);
 line([-z1,0],[y1,y_out2]); %ray starts at 0 theta
-line([0,z2],[y_out2,-abs(y_out)]);
-line([0,z2],[y_out3,-abs(y_out)]); %refelcted ray from line going through f
+line([0,z2],[y_out2,y_out]);
+line([0,z2],[y_out3,y_out]); %refelcted ray from line going through f
 line([-z1,0],[y1,y_out1]); %ray through middle of lense
-line([0, z2],[y_out1,-abs(y_out)]);
+line([0, z2],[y_out1,y_out]);
 line([-z1,0],[y1,y_out2]); %ray starts at 0 theta
-line([0,z2],[y_out2,-abs(y_out)]);
+line([0,z2],[y_out2,y_out]);
 line([-z1,0],[y1,y_out3]); %ray hits bottow of lense
-line([0,z2],[y_out3,-abs(y_out)]);
+line([0,z2],[y_out3,y_out]);
 
 %% Task 2.3
 
@@ -75,15 +76,15 @@ for i = 1:1000
     z2(i) = (i / ((i / f) - 1));
 end
 
-figure();
-hold on;
-plot(1:1000, z2);
-fplot(@(x) (1./f - 1./x).^(-1), [1, 1000])
-hold off;
-legend("Approximated", "Theoretical", "location", "best");
-xlabel("z_1 (mm)");
-ylabel("z_2 (mm)");
-title("Approximated vs Theoretical z_1 vs z_2 ");
+% figure();
+% hold on;
+% plot(1:1000, z2);
+% fplot(@(x) (1./f - 1./x).^(-1), [1, 1000])
+% hold off;
+% legend("Approximated", "Theoretical", "location", "best");
+% xlabel("z_1 (mm)");
+% ylabel("z_2 (mm)");
+% title("Approximated vs Theoretical z_1 vs z_2 ");
 
 %% Task 2.4
 
@@ -100,15 +101,15 @@ for i = 1:1000
     m(i) = y2 / y1;
 end
 
-figure();
-hold on;
-plot(1:1000, m(:));
-fplot(@(x) (1 - x./f).^(-1), [1, 1000])
-hold off;
-legend("Approximated", "Theoretical", "location", "best");
-xlabel("z_1 (mm)");
-ylabel("magnification");    
-title("z_1 vs magnification");
+% figure();
+% hold on;
+% plot(1:1000, m(:));
+% fplot(@(x) (1 - x./f).^(-1), [1, 1000])
+% hold off;
+% legend("Approximated", "Theoretical", "location", "best");
+% xlabel("z_1 (mm)");
+% ylabel("magnification");    
+% title("z_1 vs magnification");
 
 %% functions
 function M = generate_ray_transfer_matrix(z1, f)
