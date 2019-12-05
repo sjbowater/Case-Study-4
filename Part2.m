@@ -101,15 +101,15 @@ for i = 1:1000
     m(i) = y2 / y1;
 end
 
-% figure();
-% hold on;
-% plot(1:1000, m(:));
-% fplot(@(x) (1 - x./f).^(-1), [1, 1000])
-% hold off;
-% legend("Approximated", "Theoretical", "location", "best");
-% xlabel("z_1 (mm)");
-% ylabel("magnification");    
-% title("z_1 vs magnification");
+figure();
+hold on;
+plot(1:1000, m(:));
+fplot(@(x) (1 - x./f).^(-1), [1, 1000])
+hold off;
+legend("Approximated", "Theoretical", "location", "best");
+xlabel("z_1 (mm)");
+ylabel("magnification");    
+title("z_1 vs magnification");
 
 %% functions
 function M = generate_ray_transfer_matrix(z1, f)

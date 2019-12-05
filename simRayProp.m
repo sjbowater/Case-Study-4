@@ -16,7 +16,7 @@ function [y_out,theta_out] = simRayProp(M,y_in,theta_in)
     y_out     = zeros(length(y_in), 1);
     theta_out = zeros(length(y_in), 1);
     for i = 1:length(y_in)
-        x = M * [y_in theta_in].';
+        x = M * [y_in(i) theta_in(i)].';
         y_out(i) = x(1);
         theta_out(i) = x(2);
     end
