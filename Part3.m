@@ -78,9 +78,11 @@ for fnum = fnums
         
     % Visualize the components. 
     [img, x, y] = rays2img(rays_x, rays_y, color, width, 1000);
+    
     figure;
     image(x,y,img);
-
+    xlabel("x (m)"); ylabel("y (m)");
+    title("Fnum = " + int2str(fnum));
 end
 
   
