@@ -51,3 +51,5 @@ for i = 1:length(z1)
     set(gca, 'Xdir', 'Reverse');
     title("z1 = " + string(z1(i)))
 end
+    theta_in = (f / (2 * fnum))/z1(4);
+    [y_out, theta_out] = simRayProp(M, 0, theta_in)
