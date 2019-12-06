@@ -35,7 +35,7 @@ title("Radius of Confusion vs F-Number");
 %% 3.2
 z1 = 2; % the turkey image is 2m back from the lens.
 zb = 2; % the "background" image (snowglobe) is 2m back further from the turkey.
-f = 0.2;   % focal distance is 200 mm.
+f = 0.2;% focal distance is 200 mm.
 
 fnum_large = 22;
 fnum_small = 1.4;
@@ -64,16 +64,18 @@ for fnum = fnums
     [x_out2,y_out2,theta_x_out2,theta_y_out2, snow_color]   = img2rays(img2,width,numRays,theta_snow);
     
     % Handle permutations in the yz plane.
-    [turkey_output_y, ~] = simRayProp(M,      y_out1, theta_y_out1);
-    [snow_output_y,   ~] = simRayProp(M * Mb, y_out2, theta_y_out2);
+    [turkey_output_y, ray_theta_y1] = simRayProp(M,      y_out1, theta_y_out1);
+    [snow_output_y,   ray_theta_y2] = simRayProp(M * Mb, y_out2, theta_y_out2);
     
     % Handle permutations in the xz plane.
-    [turkey_output_x, ~] = simRayProp(M,      x_out1, theta_x_out1);
-    [snow_output_x,   ~] = simRayProp(M * Mb, x_out2, theta_x_out2);
+    [turkey_output_x, ray_theta_x1] = simRayProp(M,      x_out1, theta_x_out1);
+    [snow_output_x,   ray_theta_x2] = simRayProp(M * Mb, x_out2, theta_x_out2);
     
     % Store the imaging components so that they may be visualized.
     rays_x  = [turkey_output_x.' snow_output_x.'];
-    rays_y  = [turkey_output_y.' snow_output_y.'];    
+    rays_y  = [turkey_output_y.' snow_output_y.'];
+    ray_theta_x = [ray_theta_x1.' ray_theta_x2.'];
+    ray_theta_y = [ray_theta_y1.' ray_theta_y2.'];
     color   = [turkey_color snow_color];
         
     % Visualize the components. 
@@ -84,7 +86,14 @@ for fnum = fnums
     xlabel("x (m)"); ylabel("y (m)");
     title("Fnum = " + int2str(fnum));
 end
+Minv=inv(M);
+[x_out, theta_x_out] = simRayProp(Minv, rays_x, ray_theta_x);
+[y_out, theta_y_out] = simRayProp(Minv, rays_y, ray_theta_y);
 
+figure;
+[rayImg, x, y] = rays2img(x_out.', y_out.', color, 0.025, 300);
+image(x, y, rayImg); axis image xy;
+xlabel('x (m)'); ylabel('y (m)');
   
 
 
