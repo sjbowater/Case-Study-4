@@ -4,7 +4,7 @@ close all;
 %% Part 2.1
 
 f = 100;  % f  = 100 mm.
-z1 = 45; % z1 = 250 mm.
+z1 = 250; % z1 = 250 mm.
 
 M = generate_ray_transfer_matrix(z1, f);
 y1=1;
@@ -20,7 +20,7 @@ z2=z1 / ( (z1 / f) - 1)
     Mf = [  1   0;
            -1/f 1;
          ];
-    M2 = [ 1 abs(z1 / ( (z1 / f) - 1));
+    M2 = [ 1  z1 / ( (z1 / f) - 1);
            0                      1;
          ];
 % theta1=theta(y1,z1);
@@ -37,10 +37,10 @@ rectangle('Position',[-(z1/100) -y1-1 2*z1/100 2*y1+2],'Curvature',[0.5,1]);
 axis([-z1-100 z2+100 -abs(y_out)-1 y1+1]);
 hold on;
 
-[y_out2, theta_out2] = simRayProp(M2, y1, 0);
+[y_out2, theta_out2] = simRayProp(M2, y1, 0); %ray that starts at 0 degrees
     
 if f>z1
-    [y_out1, theta_out1] = simRayProp(M2, y1, y1/z2);
+    [y_out1, theta_out1] = simRayProp(M2, y1, -y1/z2); %ray that 
     [y_out3, theta_out3] = simRayProp(M1, y1, y1/(f-z1));
     line([-f, 0],[0, y_out3]);
 else 
@@ -66,6 +66,9 @@ line([-z1,0],[y1,y_out2]); %ray starts at 0 theta
 line([0,z2],[y_out2,y_out]);
 line([-z1,0],[y1,y_out3]); %ray hits bottow of lense
 line([0,z2],[y_out3,y_out]);
+title('2D ray diagram');
+xlabel('z (m)');
+ylabel('y (mm)');
 
 %% Task 2.3
 
@@ -76,15 +79,15 @@ for i = 1:1000
     z2(i) = (i / ((i / f) - 1));
 end
 
-% figure();
-% hold on;
-% plot(1:1000, z2);
-% fplot(@(x) (1./f - 1./x).^(-1), [1, 1000])
-% hold off;
-% legend("Approximated", "Theoretical", "location", "best");
-% xlabel("z_1 (mm)");
-% ylabel("z_2 (mm)");
-% title("Approximated vs Theoretical z_1 vs z_2 ");
+figure();
+hold on;
+plot(1:1000, z2);
+fplot(@(x) (1./f - 1./x).^(-1), [1, 1000])
+hold off;
+legend("Approximated", "Theoretical", "location", "best");
+xlabel("z_1 (mm)");
+ylabel("z_2 (mm)");
+title("Approximated vs Theoretical z_1 vs z_2 ");
 
 %% Task 2.4
 
