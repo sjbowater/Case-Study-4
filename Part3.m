@@ -37,7 +37,7 @@ z1 = 2; % the turkey image is 2m back from the lens.
 zb = 2; % the "background" image (snowglobe) is 2m back further from the turkey.
 f = 0.2;% focal distance is 200 mm.
 
-fnum_large = 22;
+fnum_large = 50;
 fnum_small = 1.4;
 
 fnums = [fnum_large fnum_small];
@@ -46,7 +46,7 @@ img1 = imread('200px-Turkey.png');
 img2 = imread('200px-Snow_Globe.png');
 
 width = 0.025;
-numRays = 1e6;
+numRays = 5e6;
 
 [M, ~, ~, ~] = ray_transfer_matrix(z1, f);
  
@@ -60,8 +60,8 @@ for fnum = fnums
     theta_snow   = (f / (2 * fnum)) / (z1 + zb);
     
     % convert the images to rays.
-    [x_out1,y_out1,theta_x_out1,theta_y_out1, turkey_color] = img2rays(img1,width,numRays,theta_turkey);
-    [x_out2,y_out2,theta_x_out2,theta_y_out2, snow_color]   = img2rays(img2,width,numRays,theta_snow);
+    [x_out1,y_out1,theta_x_out1,theta_y_out1, turkey_color] = img2rays(img1,0.2,numRays,theta_turkey);
+    [x_out2,y_out2,theta_x_out2,theta_y_out2, snow_color]   = img2rays(img2,0.2,numRays,theta_snow);
     
     % Handle permutations in the yz plane.
     [turkey_output_y, ray_theta_y1] = simRayProp(M,      y_out1, theta_y_out1);
@@ -72,11 +72,9 @@ for fnum = fnums
     [snow_output_x,   ray_theta_x2] = simRayProp(M * Mb, x_out2, theta_x_out2);
     
     % Store the imaging components so that they may be visualized.
-    rays_x  = [turkey_output_x.' snow_output_x.'];
-    rays_y  = [turkey_output_y.' snow_output_y.'];
-    ray_theta_x = [ray_theta_x1.' ray_theta_x2.'];
-    ray_theta_y = [ray_theta_y1.' ray_theta_y2.'];
-    color   = [turkey_color snow_color];
+    rays_x      = [turkey_output_x snow_output_x];
+    rays_y      = [turkey_output_y snow_output_y];
+    color       = [turkey_color snow_color];
         
     % Visualize the components. 
     [img, x, y] = rays2img(rays_x, rays_y, color, width, 1000);
@@ -84,16 +82,5 @@ for fnum = fnums
     figure;
     image(x,y,img);
     xlabel("x (m)"); ylabel("y (m)");
-    title("Fnum = " + int2str(fnum));
+    title("Fnum = " + string(fnum));
 end
-Minv=inv(M);
-[x_out, theta_x_out] = simRayProp(Minv, rays_x, ray_theta_x);
-[y_out, theta_y_out] = simRayProp(Minv, rays_y, ray_theta_y);
-
-figure;
-[rayImg, x, y] = rays2img(x_out.', y_out.', color, 0.025, 300);
-image(x, y, rayImg); axis image xy;
-xlabel('x (m)'); ylabel('y (m)');
-  
-
-
