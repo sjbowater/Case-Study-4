@@ -60,8 +60,8 @@ for fnum = fnums
     theta_snow   = (f / (2 * fnum)) / (z1 + zb);
     
     % convert the images to rays.
-    [x_out1,y_out1,theta_x_out1,theta_y_out1, turkey_color] = img2rays(img1,width,numRays,theta_turkey);
-    [x_out2,y_out2,theta_x_out2,theta_y_out2, snow_color]   = img2rays(img2,width,numRays,theta_snow);
+    [x_out1,y_out1,theta_x_out1,theta_y_out1, turkey_color] = img2rays(img1,.2,numRays,theta_turkey);
+    [x_out2,y_out2,theta_x_out2,theta_y_out2, snow_color]   = img2rays(img2,.2,numRays,theta_snow);
     
     % Handle permutations in the yz plane.
     [turkey_output_y, ~] = simRayProp(M,      y_out1, theta_y_out1);
